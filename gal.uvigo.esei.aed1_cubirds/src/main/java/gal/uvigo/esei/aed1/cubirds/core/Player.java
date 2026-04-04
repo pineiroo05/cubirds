@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Player {
     private String name; // nombre del jugador
-    private List<Card> mano; // mano de cartas del jugador
+    private List<Card> manoCartas; // mano de cartas del jugador
     private Player next; // referencia al siguiente jugador (creo que hacer una estructura circular de
                          // nodos para ordenar los jugadores rentaría)
 
     public Player(String name, Player next) {
         this.name = name;
         this.next = next;
-        this.mano = new ArrayList<>();
+        this.manoCartas = new ArrayList<>();
     }
 
     // getters
@@ -25,11 +25,11 @@ public class Player {
     }
 
     public int getHandSize() {
-        return mano.size();
+        return manoCartas.size();
     }
 
     public List<Card> getHand() {
-        return mano;
+        return manoCartas;
     }
 
     // setters
@@ -46,7 +46,7 @@ public class Player {
      * @return true si la mano del jugador esta vacia, si no returns false
      */
     public boolean isHandEmpty() {
-        return this.mano.size() == 0;
+        return this.manoCartas.size() == 0;
     }
 
     /**
@@ -56,7 +56,32 @@ public class Player {
      */
     public void robarCarta(Card carta) {
         if (carta != null) {
-            mano.add(carta);
+            manoCartas.add(carta);
+        }
+    }
+
+    public void anadirCarta(Card carta) throws NullPointerException {
+        if (carta == null) {
+            throw new NullPointerException();
+        }
+        int i = 0;
+        // Busca la pos donde va metida la carta. Salta las especies q no coinciden
+        while (i < manoCartas.size() && !manoCartas.get(i).getTypeBird().equals(carta.getTypeBird())) {
+            i++;
+        }
+        // Al encontrar el grupo de una especie, se va para el final
+        if (i < manoCartas.size()) {
+            while (i < manoCartas.size() && manoCartas.get(i).getTypeBird().equals(carta.getTypeBird())) {
+                i++;
+            }
+        }
+        manoCartas.add(i, carta);
+    }
+
+    // Este es para cuando la mano esta vacia
+    public void anadirCarta(List<Card> cartas) {
+        for (Card carta : cartas) {
+            anadirCarta(carta);
         }
     }
 }
