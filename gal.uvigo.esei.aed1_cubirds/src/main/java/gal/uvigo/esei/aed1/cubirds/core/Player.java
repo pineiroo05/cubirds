@@ -84,4 +84,11 @@ public class Player {
             anadirCarta(carta);
         }
     }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("=== JUGADORES ===\n");
+        sb.append("Jugador: ").append(name).append("\n");
+        sb.append("Mano: ").append(manoCartas).append("\n");
+        return sb.toString();
+    }
 }
