@@ -94,15 +94,22 @@ public class Game {
             }
         }
         
-        iu.displayMessage("cartas repartidas y mesa lista.");
+        // Muestra el estado inicial en mesa y por jugador
+        iu.displayMessage(mesa.toString());
+
+        for (Player jugador : listaJugadores) {
+            iu.displayMessage(jugador.toString());
+        }
     }
     
     /**
      * Metodo principal para jugar
      */
     public void play() {
-        
-    }
-
+        crearJugadores();
+        crearMesa();
+        prepararPartida();
+        iu.displayMessage("¡Partida preparada! Empieza " + listaJugadores.get(0).getName());
+        }
 
 }
