@@ -88,7 +88,6 @@ public class Game {
                 if (!mesa.hasMismaEspecie(i, carta.getTypeBird())) {
                     mesa.addCartaFila(i, carta);
                 } else {
-                    // si la especie ya está
                     baraja.devolverCarta(carta);
                 }
             }
