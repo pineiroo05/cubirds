@@ -49,17 +49,6 @@ public class Player {
         return this.manoCartas.size() == 0;
     }
 
-    /**
-     * Añade la carta a la mano del jugador si esta existe
-     * 
-     * @param carta
-     */
-    public void robarCarta(Card carta) {
-        if (carta != null) {
-            manoCartas.add(carta);
-        }
-    }
-
     public void anadirCarta(Card carta) throws NullPointerException {
         if (carta == null) {
             throw new NullPointerException();
