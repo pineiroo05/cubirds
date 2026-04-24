@@ -1,7 +1,7 @@
 package gal.uvigo.esei.aed1.cubirds.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import es.uvigo.esei.aed1.tads.list.List;
+import es.uvigo.esei.aed1.tads.list.LinkedList;
 
 
 public class Table {
@@ -11,33 +11,18 @@ private List<Card>[] mesa;
     public Table() {
         this.mesa = new List[4];
         for (int i = 0; i < 4; i++) {
-            this.mesa[i] = new ArrayList<>();
+            this.mesa[i] = new LinkedList<>();
         }
     }
 
-    public List<Card>[] getFila() {
-        return this.mesa;
-    }
+    /*
+    ESTO CREO Q HABIA QUE ELIMINARLO TAMBIEN O ALGO
 
-    public void setFila(List<Card>[] fila) {
-        this.mesa = fila;
-    }
-
-    public int getFilaSize(int Indexfila) { // muestra el número de cartas por fila
-            return mesa[Indexfila].size();
-    }
-
-    /**
-    * Añade una carta a la fila indicada. 
-     * Comprueba si el índice es nulo o no está en la mesa.
-     * @param fila 
-     * @param card: carta a añadir
-    */
     public void addCartaFila(int fila, Card card) {
         if (fila >= 0 && fila < mesa.length) {
-            mesa[fila].add(card);
+            mesa[fila].addFirst(card);
         }
-    }
+    }*/
 
     /**
      * Comprueba si hay alguna carta con la misma especie

@@ -2,8 +2,8 @@ package gal.uvigo.esei.aed1.cubirds.core;
 
 
 import gal.uvigo.esei.aed1.cubirds.iu.IU;
-import java.util.List;
-import java.util.ArrayList;
+import es.uvigo.esei.aed1.tads.list.List;
+import es.uvigo.esei.aed1.tads.list.LinkedList;
 
 public class Game {
 
@@ -16,7 +16,7 @@ public class Game {
     public Game(IU iu) {
         this.iu = iu;
         this.baraja = crearBaraja(); // creamos la baraja de 110 cartas
-        this.listaJugadores = new ArrayList<>();
+        this.listaJugadores = new LinkedList<>();
     }
 
     /**
@@ -41,7 +41,7 @@ public class Game {
         for (int i = 0; i < numJugadores; i++) {
             String nombre = iu.readString("Nombre del jugador " + (i + 1) + ": ");
             Player nuevo = new Player(nombre, null);
-            listaJugadores.add(nuevo);
+            listaJugadores.addFirst(nuevo);
         }
 
         
