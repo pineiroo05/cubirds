@@ -4,15 +4,14 @@ import es.uvigo.esei.aed1.tads.list.List;
 import es.uvigo.esei.aed1.tads.list.LinkedList;
 
 public class Player {
-    private String name; // nombre del jugador
-    private List<Card> manoCartas; // mano de cartas del jugador
+    private String name;
+    private List<Card> manoCartas;
 
     public Player(String name, Player next) {
         this.name = name;
         this.manoCartas = new LinkedList<>();
     }
 
-    // getters
     public String getName() {
         return this.name;
     }
@@ -21,18 +20,12 @@ public class Player {
         return manoCartas.size();
     }
 
-    /**
-     * 
-     * @return true si la mano del jugador esta vacia, si no returns false
-     */
     public boolean isHandEmpty() {
         return this.manoCartas.size() == 0;
     }
 
-    public void anadirCarta(Card carta) throws NullPointerException {
-        if (carta == null) {
-            throw new NullPointerException();
-        }
+    // REHACER CON LO DE LISTA DE LISTAS
+    public void anadirCarta(Card carta){
         int i = 0;
         while (i < manoCartas.size() && !manoCartas.get(i).getTypeBird().equals(carta.getTypeBird())) {
             i++;
@@ -50,9 +43,12 @@ public class Player {
     */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("=== JUGADORES ===\n");
+        StringBuilder sb = new StringBuilder();
         sb.append("Jugador: ").append(name).append("\n");
-        sb.append("Mano: ").append(manoCartas).append("\n");
+        sb.append("Mano: ");
+        for(Card carta:manoCartas){
+            sb.append(carta.toString()).append(" ");
+        }
         return sb.toString();
     }
 }
