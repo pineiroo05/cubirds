@@ -1,7 +1,7 @@
 package gal.uvigo.esei.aed1.cubirds.core;
 
-import es.uvigo.esei.aed1.tads.list.List;
 import es.uvigo.esei.aed1.tads.list.LinkedList;
+import es.uvigo.esei.aed1.tads.list.List;
 
 public class Player {
     private String name;
@@ -37,6 +37,27 @@ public class Player {
         TypeBird tipoPajaro=carta.getTypeBird();
         int i=tipoPajaro.ordinal();
         manoCartas.get(i).addLast(carta);
+    }
+
+    public boolean tieneEspecie(TypeBird tipo) {
+        return manoCartas.get(tipo.ordinal()).size() > 0;
+    }
+
+    public List<TypeBird> getEspeciesDisponibles() {
+        List<TypeBird> disponibles = new LinkedList<>();
+        for (TypeBird tipo : TypeBird.values()) {
+            if (tieneEspecie(tipo)) {
+                disponibles.addLast(tipo);
+            }
+        }
+        return disponibles;
+    }
+
+    public List<Card> sacarCartasEspecie(TypeBird tipo) {
+        int index = tipo.ordinal();
+        List<Card> resultado = manoCartas.get(index);
+        manoCartas.set(index, new LinkedList<>());
+        return resultado;  
     }
 
     @Override

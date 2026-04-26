@@ -32,6 +32,43 @@ public class Game {
             listaJugadores.addFirst(nuevo);
         }
     }
+
+    private void turnoJugador(Player jugador) {
+        iu.displayMessage("Turno de " + jugador.getName());
+        iu.displayMessage(jugador.toString());
+
+        // Mostrar especies disponibles
+        List<TypeBird> especies = jugador.getEspeciesDisponibles();
+        for (int i = 0; i < especies.size(); i++) {
+            iu.displayMessage(i + ": " + especies.get(i));
+        }
+
+        // Elegir especie de la mano
+        int opcion;
+        do {
+            opcion = iu.readNumber("Elige especie (0-" + (especies.size() - 1) + "): ");
+        } while (opcion < 0 || opcion >= especies.size());
+        TypeBird tipo = especies.get(opcion);
+
+        // Elegir fila
+        int fila = iu.readNumber("Elige fila (0-3): ");
+
+        // Elegir lado
+        boolean derecha = iu.readString("¿Derecha? (s/n): ").equalsIgnoreCase("s");
+
+        // Sacar todas las cartas de esa especie de la mano
+        List<Card> cartas = jugador.sacarCartasEspecie(tipo);
+
+        // Colocar en mesa
+        List<Card> capturadas = mesa.colocarCartas(fila, cartas, derecha);
+
+        // Añadir capturadas (vacío por ahora)
+        for (Card c : capturadas) {
+            jugador.anadirCarta(c);
+        }
+
+        iu.displayMessage(mesa.toString());
+    }
     
     /**
      * Metodo principal para jugar
@@ -49,5 +86,13 @@ public class Game {
         }
 
         iu.displayMessage("¡Partida preparada! Empieza " + listaJugadores.get(0).getName());
+
+        while (true) {
+            for (Player jugador : listaJugadores) {
+                turnoJugador(jugador);
+                // Aquí podrías añadir una condición de fin de juego
+            }
+        }
     }
 }
+

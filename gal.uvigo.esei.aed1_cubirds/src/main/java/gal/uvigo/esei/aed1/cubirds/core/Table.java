@@ -27,6 +27,20 @@ public class Table {
         }
     }
 
+    public List<Card> colocarCartas(int fila, List<Card> cartas, boolean derecha) {
+        if (fila < 0 || fila >= mesa.length) {
+            throw new IllegalArgumentException("Fila fuera de rango");
+        }
+            for (Card c : cartas) {
+                if (derecha){
+                    mesa[fila].addLast(c);
+                } else {
+                    mesa[fila].addFirst(c);
+                }  
+            }
+        return new LinkedList<>(); // Por ahora, no se capturan cartas
+    }
+
     /**
      * Comprueba si hay alguna carta con la misma especie
      * @param fila 
