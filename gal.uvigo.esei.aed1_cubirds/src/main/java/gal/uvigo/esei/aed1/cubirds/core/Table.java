@@ -15,7 +15,7 @@ private List<Card>[] mesa;
         }
     }
 
-    public List<Card>[] getFila() {
+/**     public List<Card>[] getFila() {
         return this.mesa;
     }
 
@@ -23,6 +23,7 @@ private List<Card>[] mesa;
         this.mesa = fila;
     }
 
+    */
     public int getFilaSize(int Indexfila) { // muestra el número de cartas por fila
             return mesa[Indexfila].size();
     }
