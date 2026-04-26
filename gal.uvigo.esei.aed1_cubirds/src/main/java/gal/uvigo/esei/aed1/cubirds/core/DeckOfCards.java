@@ -1,8 +1,7 @@
 package gal.uvigo.esei.aed1.cubirds.core;
 
-//Tendria mas sentido un stack??????
-import java.util.List;
-import java.util.ArrayList;
+import es.uvigo.esei.aed1.tads.list.List;
+import es.uvigo.esei.aed1.tads.list.LinkedList;
 import java.util.Random;
 
 public class DeckOfCards {
@@ -10,19 +9,23 @@ public class DeckOfCards {
      * Constructor: crea una baraja de cartas ordenada a partir del enumerado
      */
     private List<Card> cartas;
+    private Random rnd;
+
     public DeckOfCards() {
-        this.cartas=new ArrayList<>();
+        this.cartas=new LinkedList<>();
+        this.rnd=new Random();
         for(Card card:Card.values()){
-            cartas.add(card);
+            cartas.addFirst(card);
         }
     }
 
-    //Fisher-yates
+    public List<Card> getCartas(){
+        return this.cartas;
+    }
+
     public void barajar(){
-        Random rnd=new Random();
         for(int i=cartas.size()-1; i>0; i--){
             int posAleatoria=rnd.nextInt(i+1);
-            //Collections.swap(cartas, i, posAleatoria);
             Card aux=cartas.get(i);
             cartas.set(i, cartas.get(posAleatoria));
             cartas.set(posAleatoria, aux);
@@ -30,17 +33,15 @@ public class DeckOfCards {
     }
 
     public Card extraerCarta(){
-        if(cartas.isEmpty()){
-            return null;
-        }
-        return cartas.remove(0); //La que esta siempre al principio
+        return cartas.remove(0); 
     }
 
+    /*
     public void devolverCarta(Card carta){
         if(carta!=null){
-            cartas.add(carta);
+            cartas.addFirst(carta);
         }
-    }
+    }*/
 
     public boolean isEmpty(){
         return cartas.size()==0;
