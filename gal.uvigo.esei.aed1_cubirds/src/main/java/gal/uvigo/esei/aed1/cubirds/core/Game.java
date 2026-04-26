@@ -39,10 +39,11 @@ public class Game {
     public void play() {
         crearJugadores();
         
+        baraja.barajar();
         mesa.repartirCartas(baraja, listaJugadores);
         mesa.colocarCartasIniciales(baraja, listaJugadores);
-        baraja.barajar();
         iu.displayMessage(mesa.toString());
+        
         for (Player jugador : listaJugadores) {
             iu.displayMessage(jugador.toString());
         }
