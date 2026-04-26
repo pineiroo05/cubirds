@@ -5,11 +5,15 @@ import es.uvigo.esei.aed1.tads.list.LinkedList;
 
 public class Player {
     private String name;
-    private List<Card> manoCartas;
+    private List<List<Card>> manoCartas;
 
     public Player(String name, Player next) {
         this.name = name;
         this.manoCartas = new LinkedList<>();
+
+        for(TypeBird type:TypeBird.values()){
+            manoCartas.addLast(new LinkedList<>());
+        }
     }
 
     public String getName() {
@@ -17,37 +21,38 @@ public class Player {
     }
 
     public int getHandSize() {
-        return manoCartas.size();
+        int contador=0;
+        for(int i=0; i<manoCartas.size(); i++){
+            contador+=manoCartas.get(i).size();
+        }
+
+        return contador;
     }
 
     public boolean isHandEmpty() {
         return this.manoCartas.size() == 0;
     }
 
-    // REHACER CON LO DE LISTA DE LISTAS
     public void anadirCarta(Card carta){
-        int i = 0;
-        while (i < manoCartas.size() && !manoCartas.get(i).getTypeBird().equals(carta.getTypeBird())) {
-            i++;
-        }
-        manoCartas.add(i, carta);
+        TypeBird tipoPajaro=carta.getTypeBird();
+        int i=tipoPajaro.ordinal();
+        manoCartas.get(i).addLast(carta);
     }
 
-    /* ESTO HACE FALTA???
-
-    public void anadirCarta(List<Card> cartas) {
-        for (Card carta : cartas) {
-            anadirCarta(carta);
-        }
-    }
-    */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Jugador: ").append(name).append("\n");
-        sb.append("Mano: ");
-        for(Card carta:manoCartas){
-            sb.append(carta.toString()).append(" ");
+        sb.append("Mano:\n");
+
+        for (int i = 0; i < manoCartas.size(); i++) {
+            List<Card> actual=manoCartas.get(i);
+            if(actual.size()>0){
+                for(int j=0; j<actual.size(); j++){
+                    sb.append(actual.get(j).toString()).append(" ");
+                }
+                sb.append("\n");
+            }
         }
         return sb.toString();
     }
