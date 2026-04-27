@@ -22,15 +22,14 @@ public class Player {
 
     public int getHandSize() {
         int contador=0;
-        for(int i=0; i<manoCartas.size(); i++){
-            contador+=manoCartas.get(i).size();
+        for(List<Card> sublista:manoCartas){
+            contador+=sublista.size();
         }
-
         return contador;
     }
 
     public boolean isHandEmpty() {
-        return this.manoCartas.size() == 0;
+        return getHandSize() == 0;
     }
 
     public void anadirCarta(Card carta){

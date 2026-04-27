@@ -29,45 +29,38 @@ public class Game {
         for (int i = 0; i < numJugadores; i++) {
             String nombre = iu.readString("Nombre del jugador " + (i + 1) + ": ");
             Player nuevo = new Player(nombre, null);
-            listaJugadores.addFirst(nuevo);
+            listaJugadores.addLast(nuevo);
         }
     }
 
     private void turnoJugador(Player jugador) {
         iu.displayMessage("Turno de " + jugador.getName());
         iu.displayMessage(jugador.toString());
-
         // Mostrar especies disponibles
         List<TypeBird> especies = jugador.getEspeciesDisponibles();
         for (int i = 0; i < especies.size(); i++) {
             iu.displayMessage(i + ": " + especies.get(i));
         }
-
         // Elegir especie de la mano
         int opcion;
         do {
             opcion = iu.readNumber("Elige especie (0-" + (especies.size() - 1) + "): ");
         } while (opcion < 0 || opcion >= especies.size());
         TypeBird tipo = especies.get(opcion);
-
         // Elegir fila
         int fila; 
         do{
-            fila = iu.readNumber("Elige fila (0-3): ");
-        }while(fila < 0 || fila > 3);
-
+            fila = iu.readNumber("Elige fila (1-4): ");
+        }while(fila < 1 || fila > 4);
         // Elegir lado
         boolean derecha = iu.readString("¿Derecha? (s/n): ").equalsIgnoreCase("s");
-
         // Sacar todas las cartas de esa especie de la mano
         List<Card> cartas = jugador.sacarCartasEspecie(tipo);
-
         // Colocar en mesa
-        List<Card> capturadas = mesa.colocarCartas(fila, cartas, derecha);
+        List<Card> capturadas = mesa.colocarCartas(fila-1, cartas, derecha);
         for (Card c : capturadas) {
             jugador.anadirCarta(c);
         }
-
         iu.displayMessage(mesa.toString());
     }
     
@@ -88,10 +81,15 @@ public class Game {
 
         iu.displayMessage("¡Partida preparada! Empieza " + listaJugadores.get(0).getName());
 
-        while (true) {
+        boolean partidaAcabada=false;
+        while(partidaAcabada==false) {
             for (Player jugador : listaJugadores) {
                 turnoJugador(jugador);
-                // Aquí podrías añadir una condición de fin de juego
+                if(jugador.isHandEmpty()){
+                    iu.displayMessage("El jugador "+jugador.getName()+" se ha quedado sin cartas...");
+                    partidaAcabada=true;
+                    break;
+                }
             }
         }
     }

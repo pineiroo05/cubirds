@@ -26,7 +26,7 @@ public class Table {
         }
     }
 
-    public List<Card> colocarCartas(int fila, List<Card> cartas, boolean derecha) {
+    public List<Card> colocarCartas(int fila, List<Card> cartas, boolean derecha) throws IllegalArgumentException{
     if (fila < 0 || fila >= mesa.length) {
         throw new IllegalArgumentException("Fila fuera de rango");
     }
