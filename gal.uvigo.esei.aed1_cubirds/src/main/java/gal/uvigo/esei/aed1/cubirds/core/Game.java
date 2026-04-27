@@ -61,8 +61,6 @@ public class Game {
 
         // Colocar en mesa
         List<Card> capturadas = mesa.colocarCartas(fila, cartas, derecha);
-
-        // Añadir capturadas (vacío por ahora)
         for (Card c : capturadas) {
             jugador.anadirCarta(c);
         }
