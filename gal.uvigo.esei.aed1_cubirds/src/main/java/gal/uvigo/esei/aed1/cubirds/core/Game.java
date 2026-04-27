@@ -51,7 +51,10 @@ public class Game {
         TypeBird tipo = especies.get(opcion);
 
         // Elegir fila
-        int fila = iu.readNumber("Elige fila (0-3): ");
+        int fila; 
+        do{
+            fila = iu.readNumber("Elige fila (0-3): ");
+        }while(fila < 0 || fila >= 3);
 
         // Elegir lado
         boolean derecha = iu.readString("¿Derecha? (s/n): ").equalsIgnoreCase("s");
