@@ -36,13 +36,6 @@ public class DeckOfCards {
         return cartas.remove(0); 
     }
 
-    /*
-    public void devolverCarta(Card carta){
-        if(carta!=null){
-            cartas.addFirst(carta);
-        }
-    }*/
-
     public boolean isEmpty(){
         return cartas.size()==0;
     }

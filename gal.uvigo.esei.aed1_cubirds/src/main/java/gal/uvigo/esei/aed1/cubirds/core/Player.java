@@ -11,9 +11,9 @@ public class Player {
         this.name = name;
         this.manoCartas = new LinkedList<>();
 
-        for(TypeBird type:TypeBird.values()){
+        /*for(TypeBird type:TypeBird.values()){
             manoCartas.addLast(new LinkedList<>());
-        }
+        }*/
     }
 
     public String getName() {
@@ -33,13 +33,16 @@ public class Player {
     }
 
     public void anadirCarta(Card carta){
-        TypeBird tipoPajaro=carta.getTypeBird();
-        int i=tipoPajaro.ordinal();
+        int i=carta.getTypeBird().ordinal();
+        while(manoCartas.size()<=i){
+            manoCartas.addLast(new LinkedList<>());
+        }
         manoCartas.get(i).addLast(carta);
     }
 
     public boolean tieneEspecie(TypeBird tipo) {
-        return manoCartas.get(tipo.ordinal()).size() > 0;
+        int i=tipo.ordinal();
+        return i<manoCartas.size()&&manoCartas.get(i).size()>0;
     }
 
     public List<TypeBird> getEspeciesDisponibles() {
@@ -52,11 +55,11 @@ public class Player {
         return disponibles;
     }
 
-    public List<Card> sacarCartasEspecie(TypeBird tipo) {
-        int index = tipo.ordinal();
-        List<Card> resultado = manoCartas.get(index);
-        manoCartas.set(index, new LinkedList<>());
-        return resultado;  
+    public List<Card> sacarCartasEspecie(int pos) {
+        List<Card> resultado=manoCartas.get(pos);
+        manoCartas.remove(pos);
+        manoCartas.add(pos, new LinkedList<>());
+        return resultado;
     }
 
     @Override

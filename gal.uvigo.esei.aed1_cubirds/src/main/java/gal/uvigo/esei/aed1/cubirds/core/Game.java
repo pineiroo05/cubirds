@@ -55,13 +55,23 @@ public class Game {
         // Elegir lado
         boolean derecha = iu.readString("¿Derecha? (s/n): ").equalsIgnoreCase("s");
         // Sacar todas las cartas de esa especie de la mano
-        List<Card> cartas = jugador.sacarCartasEspecie(tipo);
+        int pos=tipo.ordinal();
+        List<Card> cartas = jugador.sacarCartasEspecie(pos);
         // Colocar en mesa
         List<Card> capturadas = mesa.colocarCartas(fila-1, cartas, derecha);
         for (Card c : capturadas) {
             jugador.anadirCarta(c);
         }
         iu.displayMessage(mesa.toString());
+    }
+
+    private void repartirCartas(DeckOfCards baraja, List<Player> listaJugadores) {
+        for (Player juagdor : listaJugadores) {
+            for (int i = 0; i < 8; i++) {
+                Card carta = baraja.extraerCarta();
+                juagdor.anadirCarta(carta);
+            }
+        }
     }
     
     /**
@@ -71,7 +81,7 @@ public class Game {
         crearJugadores();
         
         baraja.barajar();
-        mesa.repartirCartas(baraja, listaJugadores);
+        repartirCartas(baraja, listaJugadores);
         mesa.colocarCartasIniciales(baraja, listaJugadores);
         iu.displayMessage(mesa.toString());
         
@@ -82,7 +92,7 @@ public class Game {
         iu.displayMessage("¡Partida preparada! Empieza " + listaJugadores.get(0).getName());
 
         boolean partidaAcabada=false;
-        while(partidaAcabada==false) {
+        do{
             for (Player jugador : listaJugadores) {
                 turnoJugador(jugador);
                 if(jugador.isHandEmpty()){
@@ -91,7 +101,7 @@ public class Game {
                     break;
                 }
             }
-        }
+        }while(partidaAcabada==false);
     }
 }
 
