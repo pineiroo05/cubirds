@@ -53,7 +53,12 @@ public class Game {
             fila = iu.readNumber("Elige fila (1-4): ");
         }while(fila < 1 || fila > 4);
         // Elegir lado
-        boolean derecha = iu.readString("¿Derecha? (s/n): ").equalsIgnoreCase("s");
+        boolean derecha;
+        String input;
+        do {
+            input = iu.readString("¿Derecha? (s/n): ");
+            derecha = input.equalsIgnoreCase("s");
+        } while (!input.equalsIgnoreCase("s") && !input.equalsIgnoreCase("n"));
         // Sacar todas las cartas de esa especie de la mano
         int pos=tipo.ordinal();
         List<Card> cartas = jugador.sacarCartasEspecie(pos);
@@ -85,9 +90,9 @@ public class Game {
         mesa.colocarCartasIniciales(baraja, listaJugadores);
         iu.displayMessage(mesa.toString());
         
-        for (Player jugador : listaJugadores) {
+        /*for (Player jugador : listaJugadores) {
             iu.displayMessage(jugador.toString());
-        }
+        }*/
 
         iu.displayMessage("¡Partida preparada! Empieza " + listaJugadores.get(0).getName());
 
