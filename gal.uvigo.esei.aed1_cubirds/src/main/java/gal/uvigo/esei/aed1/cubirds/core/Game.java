@@ -38,9 +38,6 @@ public class Game {
         iu.displayMessage(jugador.toString());
         // Mostrar especies disponibles
         List<TypeBird> especies = jugador.getEspeciesDisponibles();
-        for (int i = 0; i < especies.size(); i++) {
-            iu.displayMessage(i + ": " + especies.get(i));
-        }
         // Elegir especie de la mano
         int opcion;
         do {
@@ -67,6 +64,7 @@ public class Game {
         for (Card c : capturadas) {
             jugador.anadirCarta(c);
         }
+        iu.displayMessage(jugador.toString());
         iu.displayMessage(mesa.toString());
     }
 
