@@ -67,16 +67,24 @@ public class Player {
         StringBuilder sb = new StringBuilder();
         sb.append("Jugador: ").append(name).append("\n");
         sb.append("Mano:\n");
-
+    
+        int indice = 0; // índice que verá el jugador
+    
         for (int i = 0; i < manoCartas.size(); i++) {
-            List<Card> actual=manoCartas.get(i);
-            if(actual.size()>0){
-                for(int j=0; j<actual.size(); j++){
+            List<Card> actual = manoCartas.get(i);
+    
+            if (actual.size() > 0) {
+                sb.append(" ").append(indice).append(":");
+    
+                for (int j = 0; j < actual.size(); j++) {
                     sb.append(actual.get(j).toString()).append(" ");
                 }
+    
                 sb.append("\n");
+                indice++;
             }
         }
+    
         return sb.toString();
     }
 }
