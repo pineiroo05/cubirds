@@ -7,13 +7,9 @@ public class Player {
     private String name;
     private List<List<Card>> manoCartas;
 
-    public Player(String name, Player next) {
+    public Player(String name) {
         this.name = name;
         this.manoCartas = new LinkedList<>();
-
-        /*for(TypeBird type:TypeBird.values()){
-            manoCartas.addLast(new LinkedList<>());
-        }*/
     }
 
     public String getName() {
@@ -21,11 +17,12 @@ public class Player {
     }
 
     public int getHandSize() {
-        int contador=0;
+        /*int contador=0;
         for(List<Card> sublista:manoCartas){
             contador+=sublista.size();
         }
-        return contador;
+        return contador;*/
+        return manoCartas.size();
     }
 
     public boolean isHandEmpty() {
@@ -33,14 +30,24 @@ public class Player {
     }
 
     public void anadirCarta(Card carta){
-        int i=carta.getTypeBird().ordinal();
-        while(manoCartas.size()<=i){
-            manoCartas.addLast(new LinkedList<>());
+        boolean encontrado=false;
+        for(int i=0; i<manoCartas.size(); i++){
+            List<Card> sublista=manoCartas.get(i);
+            if(!sublista.isEmpty() && sublista.get(0).getTypeBird().equals(carta.getTypeBird())){
+                sublista.addLast(carta);
+                encontrado=true;
+                break;
+            }
         }
-        manoCartas.get(i).addLast(carta);
+        if(!encontrado){
+            List<Card> nuevo=new LinkedList<>();
+            nuevo.addLast(carta);
+            manoCartas.addLast(nuevo);
+        }
     }
+   
 
-    public boolean tieneEspecie(TypeBird tipo) {
+    /*public boolean tieneEspecie(TypeBird tipo) {
         int i=tipo.ordinal();
         return i<manoCartas.size()&&manoCartas.get(i).size()>0;
     }
@@ -53,13 +60,10 @@ public class Player {
             }
         }
         return disponibles;
-    }
+    }*/
 
     public List<Card> sacarCartasEspecie(int pos) {
-        List<Card> resultado=manoCartas.get(pos);
-        manoCartas.remove(pos);
-        manoCartas.add(pos, new LinkedList<>());
-        return resultado;
+        return manoCartas.remove(pos);
     }
 
     @Override
@@ -67,22 +71,14 @@ public class Player {
         StringBuilder sb = new StringBuilder();
         sb.append("Jugador: ").append(name).append("\n");
         sb.append("Mano:\n");
-    
-        int indice = 0; // índice que verá el jugador
-    
+        
         for (int i = 0; i < manoCartas.size(); i++) {
             List<Card> actual = manoCartas.get(i);
-    
-            if (actual.size() > 0) {
-                sb.append(" ").append(indice).append(":");
-    
-                for (int j = 0; j < actual.size(); j++) {
-                    sb.append(actual.get(j).toString()).append(" ");
-                }
-    
-                sb.append("\n");
-                indice++;
+            sb.append(" ").append(i).append(":");
+            for(int j=0; j<actual.size(); j++){
+                sb.append(actual.get(j).toString());
             }
+            sb.append("\n");
         }
     
         return sb.toString();

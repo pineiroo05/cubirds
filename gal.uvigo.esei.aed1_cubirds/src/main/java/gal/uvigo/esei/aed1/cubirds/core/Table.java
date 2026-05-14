@@ -35,7 +35,7 @@ public class Table {
                 mesa[fila].addFirst(carta);
             }
         }
-        return new LinkedList<>(); //No le va a gustar nada...
+        return new LinkedList<>(); 
     }
 
     public List<Card> colocarCapturando(int fila, List<Card> cartas, boolean derecha, TypeBird especie){
@@ -70,7 +70,7 @@ public class Table {
             for(int i=inicio; i<mesa[fila].size(); i++){
                 if(mesa[fila].get(i).getTypeBird().equals(especie)){
                     primeraPosicion=i;
-                    break; //Ns si por esto podria decirnos algo, pero no se me ocurrió otra cosa...
+                    break;
                 }
             }
             if(primeraPosicion!=-1){
@@ -152,13 +152,13 @@ public class Table {
      * @return true si hay alguna carta con la misma especie, false si no
      */
     public boolean hasMismaEspecie(int fila, TypeBird species) {
-        if (fila >= 0 && fila < mesa.length) {
+        //if (fila >= 0 && fila < mesa.length) {
             for (Card card : mesa[fila]) {
                 if (card.getTypeBird().equals(species)) {
                     return true;
                 }
             }
-        }
+        //}
         return false;
     }
 

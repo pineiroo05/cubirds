@@ -10,7 +10,16 @@ public class IU {
     public IU() {
         keyboard = new Scanner(System.in);
     }
-
+    public int pedirNumJugadores(){
+        int numJugadores;
+        do{
+            numJugadores=readNumber("Introduce el numero de jugadores (2-5): ");
+        }while(numJugadores<2 || numJugadores>5);
+        return numJugadores;
+    }
+    public String pedirNombreJugador(int numero){
+        return readString("Nombre del jugador "+numero+": ");
+    }
     /**
      * Lee un num. de teclado
      *

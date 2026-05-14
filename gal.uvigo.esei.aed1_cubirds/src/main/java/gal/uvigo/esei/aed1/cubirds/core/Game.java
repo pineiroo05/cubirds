@@ -20,20 +20,44 @@ public class Game {
     }
 
     private void crearJugadores() {
-        int numJugadores;
-        //pedir número de jugadores (validación entre 2 y 5)
-        do {
-            numJugadores = iu.readNumber("Introduce el número de jugadores (2-5): ");
-        } while (numJugadores < 2 || numJugadores > 5);
-        // 2. Crear los objetos Player con sus nombres
-        for (int i = 0; i < numJugadores; i++) {
-            String nombre = iu.readString("Nombre del jugador " + (i + 1) + ": ");
-            Player nuevo = new Player(nombre, null);
-            listaJugadores.addLast(nuevo);
+        int numJugadores=iu.pedirNumJugadores();
+        for(int i=0; i<numJugadores; i++){
+            String nombre=iu.pedirNombreJugador(i);
+            listaJugadores.addLast(new Player(nombre));
         }
     }
 
-    private void turnoJugador(Player jugador) {
+    private void turnoJugador(Player jugador){
+        iu.displayMessage("Turno de "+jugador.getName());
+        iu.displayMessage(jugador.toString()); //Mano al inicio del turno
+        //SELECCION DE LA ESPECIE
+        int especie;
+        do{
+            especie=iu.readNumber("Elige la especie a jugar: ");
+        }while(especie<0 || especie>=jugador.getHandSize());
+        //SELECCION DE LA FILA
+        int fila;
+        do{
+            fila=iu.readNumber("Elige una fila (1-4): ");
+        }while(fila<1 || fila>4);
+        //SELECCION DEL LADO
+        boolean derecha;
+        String lado;
+        do {
+            lado = iu.readString("¿Derecha? (s/n): ");
+            derecha = lado.equalsIgnoreCase("s");
+        } while (!lado.equalsIgnoreCase("s") && !lado.equalsIgnoreCase("n"));
+        //SACAR CARTA Y COLOCARLA
+        List<Card> cartasJugar=jugador.sacarCartasEspecie(especie);
+        List<Card> cartasCapturadas=mesa.colocarCartas(fila-1, cartasJugar, derecha);
+        for(int i=0; i<cartasCapturadas.size(); i++){
+            jugador.anadirCarta(cartasCapturadas.get(i));
+        }
+        iu.displayMessage(jugador.toString());
+        iu.displayMessage(mesa.toString());
+    }
+    
+    /*private void turnoJugador(Player jugador) {
         iu.displayMessage("Turno de " + jugador.getName());
         iu.displayMessage(jugador.toString());
         // Mostrar especies disponibles
@@ -66,7 +90,7 @@ public class Game {
         }
         iu.displayMessage(jugador.toString());
         iu.displayMessage(mesa.toString());
-    }
+    }*/
 
     private void repartirCartas(DeckOfCards baraja, List<Player> listaJugadores) {
         for (Player juagdor : listaJugadores) {
