@@ -89,69 +89,6 @@ public class Table {
         }
         return capturadas;
     }
-
-    /*
-     * public List<Card> colocarCartas(int fila, List<Card> cartas, boolean derecha)
-     * throws IllegalArgumentException {
-     * if (fila < 0 || fila >= mesa.length) {
-     * throw new IllegalArgumentException("Fila fuera de rango");
-     * }
-     * List<Card> capturadas = new LinkedList<>();
-     * TypeBird especie = cartas.get(0).getTypeBird();
-     * if (!hasMismaEspecie(fila, especie)) {
-     * // No hay cartas de esa especie en la fila -> colocar sin capturar
-     * for (Card c : cartas) {
-     * if (derecha) {
-     * mesa[fila].addLast(c);
-     * } else {
-     * mesa[fila].addFirst(c);
-     * }
-     * }
-     * return capturadas; // vacía
-     * }
-     * if (derecha) {
-     * for (Card c : cartas) {
-     * mesa[fila].addLast(c);
-     * }
-     * int tamano = mesa[fila].size();
-     * int numNuevas = cartas.size();
-     * int finBusqueda = tamano - numNuevas - 1;
-     * int indice = -1;
-     * for (int i = finBusqueda; i >= 0; i--) {
-     * if (mesa[fila].get(i).getTypeBird().equals(especie)) {
-     * indice = i;
-     * break;
-     * }
-     * }
-     * if (indice != -1) {
-     * for (int i = finBusqueda; i > indice; i--) {
-     * capturadas.addFirst(mesa[fila].get(i));
-     * mesa[fila].remove(i);
-     * }
-     * }
-     * } else {
-     * for (Card c : cartas) {
-     * mesa[fila].addFirst(c);
-     * }
-     * int numNuevas = cartas.size();
-     * int indice = -1;
-     * for (int i = numNuevas; i < mesa[fila].size(); i++) {
-     * if (mesa[fila].get(i).getTypeBird().equals(especie)) {
-     * indice = i;
-     * break;
-     * }
-     * }
-     * if (indice != -1) {
-     * for (int i = indice - 1; i >= numNuevas; i--) {
-     * capturadas.addFirst(mesa[fila].get(i));
-     * mesa[fila].remove(i);
-     * }
-     * }
-     * }
-     * return capturadas;
-     * }
-     */
-
     /**
      * Comprueba si hay alguna carta con la misma especie
      * 
