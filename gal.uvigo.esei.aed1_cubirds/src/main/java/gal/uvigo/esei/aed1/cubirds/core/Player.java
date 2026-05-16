@@ -27,6 +27,10 @@ public class Player {
         return manoCartas.size();
     }
 
+    public int[] getZonaJuego() {
+        return zonaJuego;
+    }
+
     public int numCartasEspecie(int pos){
         return manoCartas.get(pos).size();
     }
