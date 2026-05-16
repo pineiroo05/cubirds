@@ -61,22 +61,18 @@ public class Player {
             manoCartas.addLast(nuevo);
         }
     }
-   
 
-    /*public boolean tieneEspecie(TypeBird tipo) {
-        int i=tipo.ordinal();
-        return i<manoCartas.size()&&manoCartas.get(i).size()>0;
-    }
-
-    public List<TypeBird> getEspeciesDisponibles() {
-        List<TypeBird> disponibles = new LinkedList<>();
-        for (TypeBird tipo : TypeBird.values()) {
-            if (tieneEspecie(tipo)) {
-                disponibles.addLast(tipo);
+    //Saca las cartas de la mano del jugador. Necesario para finalizar el juego
+    public List<Card> vaciarMano(){
+        List<Card> cartasMano=new LinkedList<>();
+        while(!manoCartas.isEmpty()){
+            List<Card> sublista=manoCartas.remove(0);
+            while(!sublista.isEmpty()){
+                cartasMano.addLast(sublista.remove(0));
             }
         }
-        return disponibles;
-    }*/
+        return cartasMano;
+    }
 
     public List<Card> sacarCartasEspecie(int pos) {
         return manoCartas.remove(pos);

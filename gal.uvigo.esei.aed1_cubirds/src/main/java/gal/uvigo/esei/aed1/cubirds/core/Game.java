@@ -94,12 +94,9 @@ public class Game {
                     iu.displayMessage(jugador.getName() + " ha conseguido 7 bandadas y ha ganado la partida.");
                     System.exit(0);
                 }
-            }
-            else{
+            }else{
                 iu.displayMessage("No es posible bajar la especie, solo tienes " + numCartas + " y necesitas al menos " + bandadaMinima);
-            }
-            
-            
+            }  
         }
         iu.displayMessage(mesa.toString());
     }
@@ -159,11 +156,30 @@ public class Game {
         mesa.colocarCartasIniciales(baraja, listaJugadores);
         iu.displayMessage(mesa.toString());
         
-        /*for (Player jugador : listaJugadores) {
-            iu.displayMessage(jugador.toString());
-        }*/
-
         iu.displayMessage("¡Partida preparada! Empieza " + listaJugadores.get(0).getName());
+
+        do{
+            for(Player jugador:listaJugadores){
+                turnoJugador(jugador);
+                //El jugador actual tiene la mano vacia? los otros meten su mano en los descartes
+                if(jugador.isHandEmpty()){
+                    for(Player otroJugador:listaJugadores){
+                        if(!otroJugador.equals(jugador)){
+                            descartes.añadirCartas(otroJugador.vaciarMano());
+                        }
+                    }
+                    List<Card> descartesRecuperados=descartes.extraerTodas();
+                    for(int i=0; i<descartesRecuperados.size(); i++){
+                        baraja.getCartas().addLast(descartesRecuperados.get(i));
+                    }
+                    baraja.barajar();
+                    repartirCartas(baraja, listaJugadores);
+                    iu.displayMessage("-Se reparten nuevas cartas-");
+                }
+            }
+        }while(true);
+        /*
+        ESTO DE AQUI NO HARIA FALTA YA. El boolean partida acabada ya no haria falta pq sale con el System.exit(0) q hay por turno jugador.
 
         boolean partidaAcabada=false;
         do{
@@ -175,7 +191,6 @@ public class Game {
                     break;
                 }
             }
-        }while(partidaAcabada==false);
+        }while(partidaAcabada==false);*/
     }
 }
-

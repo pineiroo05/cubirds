@@ -15,7 +15,7 @@ public class DiscardedCards {
      * Metodo auxiliar de añadirCartas
      */
     public void añadirCarta(Card carta) {
-            cartas.addLast(carta);
+        cartas.addLast(carta);
     }
 
     //devuelve el tamaño de la lista de descartes
@@ -36,15 +36,11 @@ public class DiscardedCards {
      */
     public List<Card> extraerTodas() {
         List<Card> aDevolver = new LinkedList<>();
-    
-   
-    while (!this.cartas.isEmpty()) {
-        
-        Card aux = this.cartas.get(0);
-        this.cartas.removeFirst();
-        aDevolver.addLast(aux);
-    }
-    
-    return aDevolver;
+        while (!this.cartas.isEmpty()) {
+            Card aux = this.cartas.get(0);
+            this.cartas.removeFirst();
+            aDevolver.addLast(aux);
+        }
+        return aDevolver;
     }
 }
