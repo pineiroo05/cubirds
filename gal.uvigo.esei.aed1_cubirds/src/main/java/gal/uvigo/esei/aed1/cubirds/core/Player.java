@@ -6,12 +6,12 @@ import es.uvigo.esei.aed1.tads.list.List;
 public class Player {
     private String name;
     private List<List<Card>> manoCartas;
-    private List<Card> zonaJuego;
+    private int[] zonaJuego;
 
     public Player(String name) {
         this.name = name;
         this.manoCartas = new LinkedList<>();
-        this.zonaJuego = new LinkedList<>();
+        this.zonaJuego = new int[8];
     }
 
     public String getName() {
@@ -27,16 +27,18 @@ public class Player {
         return manoCartas.size();
     }
 
+    public int numCartasEspecie(int pos){
+        return manoCartas.get(pos).size();
+    }
+
     public boolean isHandEmpty() {
         return getHandSize() == 0;
     }
     /**
-     *incrementa el contador de una especie determinada en la zona de juego.
+     *suma 1 al valor de la especie q corresponda tras bajar la bandada
      */
-    public void añadirAZonaJuego(List<Card> cartasGanadas) {
-        for (int i = 0; i < cartasGanadas.size(); i++) {
-            this.zonaJuego.addLast(cartasGanadas.get(i));
-        }
+    public void sumarContadorEspecie(TypeBird especie) {
+        zonaJuego[especie.ordinal()]++; //ordinal pilla el num que le corresponda a la especie en el enum(flamenco es 0, tucan 1, etc)
     }
 
     public void anadirCarta(Card carta){
@@ -74,6 +76,10 @@ public class Player {
 
     public List<Card> sacarCartasEspecie(int pos) {
         return manoCartas.remove(pos);
+    }
+
+    public List<Card> devolverCartasEspecie(int pos){
+        return manoCartas.get(pos);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class Table {
             capturadas = colocarCapturando(fila, cartas, derecha, especie);
         }
         if (filaTieneEspecieUnica(fila)) {
-            rellenarFilaMonocultivo(fila, baraja, descartes);
+            rellenarFila(fila, baraja, descartes);
         }
         return capturadas;
     }
@@ -209,42 +209,44 @@ public class Table {
 
     /**
      * rellena la fila robando de la baraja hasta que aparezca una especie diferente
-     * a la que ya domina la fila.
+     * a la que solo queda en la fila.
      */
-    private void rellenarFilaMonocultivo(int fila, DeckOfCards baraja, DiscardedCards descartes) {
+    private void rellenarFila(int fila, DeckOfCards baraja, DiscardedCards descartes) {
 
         if (mesa[fila].isEmpty()) {
-            if (RecuperarBaraja(baraja, descartes)) {
+            if (RecuperarDeBaraja(baraja, descartes)) {
                 mesa[fila].addLast(baraja.extraerCarta());
             } else {
                 return;
             }
         }
 
-        TypeBird especieBloqueante = mesa[fila].get(0).getTypeBird();
+        TypeBird especieSobrante = mesa[fila].get(0).getTypeBird(); //no me convence el nombre de Sobrante, pero ya no se que ponerle
         boolean especieDiferenteEncontrada = false;
 
         boolean quedanCartasDisponibles = true;
         while (!especieDiferenteEncontrada && quedanCartasDisponibles) {
 
             // comprobamos si podemos recuperar cartas
-            if (!RecuperarBaraja(baraja, descartes)) {
+            if (!RecuperarDeBaraja(baraja, descartes)) {
                 quedanCartasDisponibles = false;
             } else {
                 // si hay cartas ejecutamos el camino normal de forma segura
                 Card nuevaCarta = baraja.extraerCarta();
                 mesa[fila].addLast(nuevaCarta);
 
-                if (!nuevaCarta.getTypeBird().equals(especieBloqueante)) {
+                if (!nuevaCarta.getTypeBird().equals(especieSobrante)) {
                     especieDiferenteEncontrada = true;
                 }
             }
         }
     }
-
-    private boolean RecuperarBaraja(DeckOfCards baraja, DiscardedCards descartes) {
-        if (baraja.isEmpty()) {
-
+    
+    private boolean RecuperarDeBaraja(DeckOfCards baraja, DiscardedCards descartes) {
+         if (baraja.isEmpty()) {
+            if (descartes.getTamano() == 0) {
+                return false;
+            }
             List<Card> recuperadas = descartes.extraerTodas();
             for (int i = 0; i < recuperadas.size(); i++) {
                 baraja.getCartas().addLast(recuperadas.get(i));

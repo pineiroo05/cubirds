@@ -12,12 +12,14 @@ public class Game {
     private List<Player> listaJugadores;
     private DiscardedCards descartes;
     
+    
 
     public Game(IU iu) {
         this.iu = iu;
         this.baraja = new DeckOfCards(); // creamos la baraja de 110 cartas
         this.mesa=new Table();
         this.listaJugadores = new LinkedList<>();
+        this.descartes = new DiscardedCards();
     }
 
     private void crearJugadores() {
@@ -56,6 +58,31 @@ public class Game {
             jugador.anadirCarta(cartasCapturadas.get(i));
         }
         iu.displayMessage(jugador.toString());
+        String respuesta;
+        do {
+            respuesta = iu.readString("¿Deseas añadir una especie a tu zona de juego? (s/n): ");
+        } while (!respuesta.equalsIgnoreCase("s") && !respuesta.equalsIgnoreCase("n"));
+        if(respuesta.equalsIgnoreCase("s")){
+            int pos;
+            do {
+                pos = iu.readNumber("Elige la especie a bajar de tu mano a tu zona de juego: ");
+            } while (pos < 0 || pos >= jugador.getHandSize());
+
+            int numCartas = jugador.numCartasEspecie(pos);
+            int bandadaMinima = jugador.devolverCartasEspecie(pos).get(0).getSmallFlock();
+
+            if(numCartas >= bandadaMinima){
+                TypeBird aSumar = jugador.devolverCartasEspecie(pos).getFirst().getTypeBird();
+                descartes.añadirCartas(jugador.sacarCartasEspecie(pos));
+                jugador.sumarContadorEspecie(aSumar);
+                iu.displayMessage("Se ha bajado la especie y se ha sumado una bandada de " + aSumar + " a la zona de juego");
+            }
+            else{
+                iu.displayMessage("No es posible bajar la especie, solo tienes " + numCartas + " y necesitas al menos " + bandadaMinima);
+            }
+            
+            
+        }
         iu.displayMessage(mesa.toString());
     }
     

@@ -12,16 +12,19 @@ public class DiscardedCards {
     }
 
     /**
-     * añade una carta al monton de descartes.
+     * Metodo auxiliar de añadirCartas
      */
     public void añadirCarta(Card carta) {
-        if (carta != null) {
             cartas.addLast(carta);
-        }
     }
+
+    //devuelve el tamaño de la lista de descartes
+    public int getTamano() {
+        return this.cartas.size();
+    }
+    
     /**
      * añade una lista completa de cartas a los descartes.
-     * util cuando un jugador descarta varias cartas a la vez.
      */
     public void añadirCartas(List<Card> lista) {
         for (int i = 0; i < lista.size(); i++) {
@@ -37,9 +40,9 @@ public class DiscardedCards {
    
     while (!this.cartas.isEmpty()) {
         
-        Card carta = this.cartas.get(0);
+        Card aux = this.cartas.get(0);
         this.cartas.removeFirst();
-        aDevolver.addLast(carta);
+        aDevolver.addLast(aux);
     }
     
     return aDevolver;
