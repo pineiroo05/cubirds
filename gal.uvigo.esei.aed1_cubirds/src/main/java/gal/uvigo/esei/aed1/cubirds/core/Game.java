@@ -10,6 +10,8 @@ public class Game {
     private DeckOfCards baraja;
     private Table mesa;
     private List<Player> listaJugadores;
+    private DiscardedCards descartes;
+    
     
 
     public Game(IU iu) {
@@ -17,30 +19,96 @@ public class Game {
         this.baraja = new DeckOfCards(); // creamos la baraja de 110 cartas
         this.mesa=new Table();
         this.listaJugadores = new LinkedList<>();
+        this.descartes = new DiscardedCards();
     }
 
     private void crearJugadores() {
-        int numJugadores;
-        //pedir número de jugadores (validación entre 2 y 5)
-        do {
-            numJugadores = iu.readNumber("Introduce el número de jugadores (2-5): ");
-        } while (numJugadores < 2 || numJugadores > 5);
-        // 2. Crear los objetos Player con sus nombres
-        for (int i = 0; i < numJugadores; i++) {
-            String nombre = iu.readString("Nombre del jugador " + (i + 1) + ": ");
-            Player nuevo = new Player(nombre, null);
-            listaJugadores.addLast(nuevo);
+        int numJugadores=iu.pedirNumJugadores();
+        for(int i=0; i<numJugadores; i++){
+            String nombre=iu.pedirNombreJugador(i);
+            listaJugadores.addLast(new Player(nombre));
+            
         }
     }
 
-    private void turnoJugador(Player jugador) {
+    private void turnoJugador(Player jugador){
+        iu.displayMessage("Turno de "+jugador.getName());
+        iu.displayMessage(jugador.toString()); //Mano al inicio del turno
+        //SELECCION DE LA ESPECIE
+        int especie;
+        do{
+            especie=iu.readNumber("Elige la especie a jugar: ");
+        }while(especie<0 || especie>=jugador.getHandSize());
+        //SELECCION DE LA FILA
+        int fila;
+        do{
+            fila=iu.readNumber("Elige una fila (1-4): ");
+        }while(fila<1 || fila>4);
+        
+        boolean derecha;
+        String lado;
+        do {
+            lado = iu.readString("¿Derecha? (s/n): ");
+            derecha = lado.equalsIgnoreCase("s");
+        } while (!lado.equalsIgnoreCase("s") && !lado.equalsIgnoreCase("n"));
+        //SACAR CARTA Y COLOCARLA
+        List<Card> cartasJugar=jugador.sacarCartasEspecie(especie);
+        List<Card> cartasCapturadas=mesa.colocarCartas(fila-1, cartasJugar, derecha, baraja,descartes);
+        for(int i=0; i<cartasCapturadas.size(); i++){
+            jugador.anadirCarta(cartasCapturadas.get(i));
+        }
+        iu.displayMessage(jugador.toString());
+        String respuesta;
+        do {
+            respuesta = iu.readString("¿Deseas añadir una especie a tu zona de juego? (s/n): ");
+        } while (!respuesta.equalsIgnoreCase("s") && !respuesta.equalsIgnoreCase("n"));
+        if(respuesta.equalsIgnoreCase("s")){
+            int pos;
+            do {
+                //muestra las bandadas que ya tiene el jugador
+                for (int i = 0; i < jugador.getZonaJuego().length; i++) { 
+                    if (jugador.getZonaJuego()[i] > 0) {
+                        iu.displayMessage("Tienes bandada de " + TypeBird.values()[i]);
+                    }
+                }
+                pos = iu.readNumber("Elige la especie a bajar de tu mano a tu zona de juego: ");
+            } while (pos < 0 || pos >= jugador.getHandSize());
+
+            int numCartas = jugador.numCartasEspecie(pos);
+            int bandadaMinima = jugador.devolverCartasEspecie(pos).get(0).getSmallFlock();
+
+            if(numCartas >= bandadaMinima){
+                TypeBird aSumar = jugador.devolverCartasEspecie(pos).getFirst().getTypeBird();
+                descartes.añadirCartas(jugador.sacarCartasEspecie(pos));
+                jugador.sumarContadorEspecie(aSumar);
+                iu.displayMessage("Se ha bajado la especie y se ha sumado una bandada de " + aSumar + " a la zona de juego");
+
+                int contador = 0;
+                for (int i = 0; i < jugador.getZonaJuego().length; i++) {
+                    if (jugador.getZonaJuego()[i] > 0) {
+                        contador++;
+                        iu.displayMessage("Tienes bandada de " + TypeBird.values()[i]);
+                    }
+                }
+                if (contador >= 7) {
+                    iu.displayMessage(jugador.getName() + " ha conseguido 7 bandadas y ha ganado la partida.");
+                    System.exit(0);
+                }
+            }
+            else{
+                iu.displayMessage("No es posible bajar la especie, solo tienes " + numCartas + " y necesitas al menos " + bandadaMinima);
+            }
+            
+            
+        }
+        iu.displayMessage(mesa.toString());
+    }
+    
+    /*private void turnoJugador(Player jugador) {
         iu.displayMessage("Turno de " + jugador.getName());
         iu.displayMessage(jugador.toString());
         // Mostrar especies disponibles
         List<TypeBird> especies = jugador.getEspeciesDisponibles();
-        for (int i = 0; i < especies.size(); i++) {
-            iu.displayMessage(i + ": " + especies.get(i));
-        }
         // Elegir especie de la mano
         int opcion;
         do {
@@ -67,8 +135,9 @@ public class Game {
         for (Card c : capturadas) {
             jugador.anadirCarta(c);
         }
+        iu.displayMessage(jugador.toString());
         iu.displayMessage(mesa.toString());
-    }
+    }*/
 
     private void repartirCartas(DeckOfCards baraja, List<Player> listaJugadores) {
         for (Player juagdor : listaJugadores) {

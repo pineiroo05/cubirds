@@ -14,68 +14,73 @@ public class Table {
         }
     }
 
-    public List<Card> colocarCartas(int fila, List<Card> cartas, boolean derecha){
-        List<Card> capturadas=new LinkedList<>();
-        if(fila<0 || fila>=mesa.length || cartas.isEmpty()){
+    public List<Card> colocarCartas(int fila, List<Card> cartas, boolean derecha,DeckOfCards baraja, DiscardedCards descartes) {
+        List<Card> capturadas = new LinkedList<>();
+        if (fila < 0 || fila >= mesa.length || cartas.isEmpty()) {
             return capturadas;
         }
-        TypeBird especie=cartas.get(0).getTypeBird();
-        //En caso de q la fila donde quiero meter las cartas no tenga esa misma especie
-        if(!hasMismaEspecie(fila, especie)){
-            return colocarSinCapturar(fila, cartas, derecha);
+        TypeBird especie = cartas.get(0).getTypeBird();
+        if (!hasMismaEspecie(fila, especie)) {
+            capturadas = colocarSinCapturar(fila, cartas, derecha);
+        } else {
+            capturadas = colocarCapturando(fila, cartas, derecha, especie);
         }
-        return colocarCapturando(fila, cartas, derecha, especie);
+        if (filaTieneEspecieUnica(fila)) {
+            rellenarFila(fila, baraja, descartes);
+        }
+        return capturadas;
     }
 
-    public List<Card> colocarSinCapturar(int fila, List<Card> cartas, boolean derecha){
-        for(Card carta:cartas){
-            if(derecha){
+    public List<Card> colocarSinCapturar(int fila, List<Card> cartas, boolean derecha) {
+        for (Card carta : cartas) {
+            if (derecha) {
                 mesa[fila].addLast(carta);
-            }else{
+            } else {
                 mesa[fila].addFirst(carta);
             }
         }
-        return new LinkedList<>(); //No le va a gustar nada...
+        return new LinkedList<>();
     }
 
-    public List<Card> colocarCapturando(int fila, List<Card> cartas, boolean derecha, TypeBird especie){
-        List<Card> capturadas=new LinkedList<>();
-        if(derecha){
-            for(Card carta:cartas){
+    public List<Card> colocarCapturando(int fila, List<Card> cartas, boolean derecha, TypeBird especie) {
+        List<Card> capturadas = new LinkedList<>();
+        if (derecha) {
+            for (Card carta : cartas) {
                 mesa[fila].addLast(carta);
             }
-            //A partir de aqui buscamos las cartas: miramos desde el principio si coincide o no y se guarda segun me interese
-            int limite=mesa[fila].size()-cartas.size(); //Ignoraria las ultimas q añadi para q no se las lleve tmb
-            int ultimaPosicion=-1; //IMPORTANTE 
-            for(int i=0; i<limite; i++){
-                if(mesa[fila].get(i).getTypeBird().equals(especie)){
-                    ultimaPosicion=i;
+            // A partir de aqui buscamos las cartas: miramos desde el principio si coincide
+            // o no y se guarda segun me interese
+            int limite = mesa[fila].size() - cartas.size(); // Ignoraria las ultimas q añadi para q no se las lleve tmb
+            int ultimaPosicion = -1; // IMPORTANTE
+            for (int i = 0; i < limite; i++) {
+                if (mesa[fila].get(i).getTypeBird().equals(especie)) {
+                    ultimaPosicion = i;
                 }
             }
-            if(ultimaPosicion!=-1){
-                int i=ultimaPosicion+1;
-                while(i<limite){
+            if (ultimaPosicion != -1) {
+                int i = ultimaPosicion + 1;
+                while (i < limite) {
                     capturadas.addLast(mesa[fila].get(i));
                     mesa[fila].remove(i);
                     limite--;
                 }
             }
-        }else{
-            for(Card carta:cartas){
+        } else {
+            for (Card carta : cartas) {
                 mesa[fila].addFirst(carta);
             }
-            
-            int inicio=cartas.size();
-            int primeraPosicion=-1;
-            for(int i=inicio; i<mesa[fila].size(); i++){
-                if(mesa[fila].get(i).getTypeBird().equals(especie)){
-                    primeraPosicion=i;
-                    break; //Ns si por esto podria decirnos algo, pero no se me ocurrió otra cosa...
+
+            int inicio = cartas.size();
+            int primeraPosicion = -1;
+            for (int i = inicio; i < mesa[fila].size(); i++) {
+                if (mesa[fila].get(i).getTypeBird().equals(especie)) {
+                    primeraPosicion = i;
+                    break;
                 }
             }
-            if(primeraPosicion!=-1){
-                int i=inicio;
-                while(i<primeraPosicion){
+            if (primeraPosicion != -1) {
+                int i = inicio;
+                while (i < primeraPosicion) {
                     capturadas.addLast(mesa[fila].get(i));
                     mesa[fila].remove(i);
                     primeraPosicion--;
@@ -85,64 +90,67 @@ public class Table {
         return capturadas;
     }
 
-    /*public List<Card> colocarCartas(int fila, List<Card> cartas, boolean derecha) throws IllegalArgumentException {
-        if (fila < 0 || fila >= mesa.length) {
-            throw new IllegalArgumentException("Fila fuera de rango");
-        }
-        List<Card> capturadas = new LinkedList<>();
-        TypeBird especie = cartas.get(0).getTypeBird();
-        if (!hasMismaEspecie(fila, especie)) {
-            // No hay cartas de esa especie en la fila -> colocar sin capturar
-            for (Card c : cartas) {
-                if (derecha) {
-                    mesa[fila].addLast(c);
-                } else {
-                    mesa[fila].addFirst(c);
-                }
-            }
-            return capturadas; // vacía
-        }
-        if (derecha) {
-            for (Card c : cartas) {
-                mesa[fila].addLast(c);
-            }
-            int tamano = mesa[fila].size();
-            int numNuevas = cartas.size();
-            int finBusqueda = tamano - numNuevas - 1;
-            int indice = -1;
-            for (int i = finBusqueda; i >= 0; i--) {
-                if (mesa[fila].get(i).getTypeBird().equals(especie)) {
-                    indice = i;
-                    break;
-                }
-            }
-            if (indice != -1) {
-                for (int i = finBusqueda; i > indice; i--) {
-                    capturadas.addFirst(mesa[fila].get(i));
-                    mesa[fila].remove(i);
-                }
-            }
-        } else {
-            for (Card c : cartas) {
-                mesa[fila].addFirst(c);
-            }
-            int numNuevas = cartas.size();
-            int indice = -1;
-            for (int i = numNuevas; i < mesa[fila].size(); i++) {
-                if (mesa[fila].get(i).getTypeBird().equals(especie)) {
-                    indice = i;
-                    break;
-                }
-            }
-            if (indice != -1) {
-                for (int i = indice - 1; i >= numNuevas; i--) {
-                    capturadas.addFirst(mesa[fila].get(i));
-                    mesa[fila].remove(i);
-                }
-            }
-        }
-        return capturadas;
-    }*/
+    /*
+     * public List<Card> colocarCartas(int fila, List<Card> cartas, boolean derecha)
+     * throws IllegalArgumentException {
+     * if (fila < 0 || fila >= mesa.length) {
+     * throw new IllegalArgumentException("Fila fuera de rango");
+     * }
+     * List<Card> capturadas = new LinkedList<>();
+     * TypeBird especie = cartas.get(0).getTypeBird();
+     * if (!hasMismaEspecie(fila, especie)) {
+     * // No hay cartas de esa especie en la fila -> colocar sin capturar
+     * for (Card c : cartas) {
+     * if (derecha) {
+     * mesa[fila].addLast(c);
+     * } else {
+     * mesa[fila].addFirst(c);
+     * }
+     * }
+     * return capturadas; // vacía
+     * }
+     * if (derecha) {
+     * for (Card c : cartas) {
+     * mesa[fila].addLast(c);
+     * }
+     * int tamano = mesa[fila].size();
+     * int numNuevas = cartas.size();
+     * int finBusqueda = tamano - numNuevas - 1;
+     * int indice = -1;
+     * for (int i = finBusqueda; i >= 0; i--) {
+     * if (mesa[fila].get(i).getTypeBird().equals(especie)) {
+     * indice = i;
+     * break;
+     * }
+     * }
+     * if (indice != -1) {
+     * for (int i = finBusqueda; i > indice; i--) {
+     * capturadas.addFirst(mesa[fila].get(i));
+     * mesa[fila].remove(i);
+     * }
+     * }
+     * } else {
+     * for (Card c : cartas) {
+     * mesa[fila].addFirst(c);
+     * }
+     * int numNuevas = cartas.size();
+     * int indice = -1;
+     * for (int i = numNuevas; i < mesa[fila].size(); i++) {
+     * if (mesa[fila].get(i).getTypeBird().equals(especie)) {
+     * indice = i;
+     * break;
+     * }
+     * }
+     * if (indice != -1) {
+     * for (int i = indice - 1; i >= numNuevas; i--) {
+     * capturadas.addFirst(mesa[fila].get(i));
+     * mesa[fila].remove(i);
+     * }
+     * }
+     * }
+     * return capturadas;
+     * }
+     */
 
     /**
      * Comprueba si hay alguna carta con la misma especie
@@ -152,13 +160,13 @@ public class Table {
      * @return true si hay alguna carta con la misma especie, false si no
      */
     public boolean hasMismaEspecie(int fila, TypeBird species) {
-        if (fila >= 0 && fila < mesa.length) {
-            for (Card card : mesa[fila]) {
-                if (card.getTypeBird().equals(species)) {
-                    return true;
-                }
+        // if (fila >= 0 && fila < mesa.length) {
+        for (Card card : mesa[fila]) {
+            if (card.getTypeBird().equals(species)) {
+                return true;
             }
         }
+        // }
         return false;
     }
 
@@ -168,12 +176,84 @@ public class Table {
                 Card carta = baraja.extraerCarta();
                 // no puede haber especies repetidas en la misma fila al inicio
                 if (!hasMismaEspecie(i, carta.getTypeBird())) {
-                    mesa[i].addFirst(carta);;
+                    mesa[i].addFirst(carta);
+                    ;
                 } else {
                     baraja.getCartas().addLast(carta);
                 }
             }
         }
+    }
+
+    /**
+     * comprueba si todas las cartas de una fila son de la misma especie.
+     * si la fila esta vacia, también devuelve true .
+     */
+    private boolean filaTieneEspecieUnica(int fila) {
+        if (mesa[fila].isEmpty()) {
+            return true;
+        }
+
+        // Cogemos la primera carta como referencia
+        TypeBird primeraEspecie = mesa[fila].get(0).getTypeBird();
+
+        // Comprobamos si hay alguna carta que sea DIFERENTE
+        for (int i = 1; i < mesa[fila].size(); i++) {
+            if (!mesa[fila].get(i).getTypeBird().equals(primeraEspecie)) {
+                return false; // En cuanto vemos una especie distinta, la fila es válida
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * rellena la fila robando de la baraja hasta que aparezca una especie diferente
+     * a la que solo queda en la fila.
+     */
+    private void rellenarFila(int fila, DeckOfCards baraja, DiscardedCards descartes) {
+
+        if (mesa[fila].isEmpty()) {
+            if (RecuperarDeBaraja(baraja, descartes)) {
+                mesa[fila].addLast(baraja.extraerCarta());
+            } else {
+                return;
+            }
+        }
+
+        TypeBird especieSobrante = mesa[fila].get(0).getTypeBird(); //no me convence el nombre de Sobrante, pero ya no se que ponerle
+        boolean especieDiferenteEncontrada = false;
+
+        boolean quedanCartasDisponibles = true;
+        while (!especieDiferenteEncontrada && quedanCartasDisponibles) {
+
+            // comprobamos si podemos recuperar cartas
+            if (!RecuperarDeBaraja(baraja, descartes)) {
+                quedanCartasDisponibles = false;
+            } else {
+                // si hay cartas ejecutamos el camino normal de forma segura
+                Card nuevaCarta = baraja.extraerCarta();
+                mesa[fila].addLast(nuevaCarta);
+
+                if (!nuevaCarta.getTypeBird().equals(especieSobrante)) {
+                    especieDiferenteEncontrada = true;
+                }
+            }
+        }
+    }
+    
+    private boolean RecuperarDeBaraja(DeckOfCards baraja, DiscardedCards descartes) {
+         if (baraja.isEmpty()) {
+            if (descartes.getTamano() == 0) {
+                return false;
+            }
+            List<Card> recuperadas = descartes.extraerTodas();
+            for (int i = 0; i < recuperadas.size(); i++) {
+                baraja.getCartas().addLast(recuperadas.get(i));
+            }
+            baraja.barajar();
+        }
+        return true;
     }
 
     /**
