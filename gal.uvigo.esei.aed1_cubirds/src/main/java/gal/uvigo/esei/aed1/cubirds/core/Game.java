@@ -65,6 +65,12 @@ public class Game {
         if(respuesta.equalsIgnoreCase("s")){
             int pos;
             do {
+                //muestra las bandadas que ya tiene el jugador
+                for (int i = 0; i < jugador.getZonaJuego().length; i++) { 
+                    if (jugador.getZonaJuego()[i] > 0) {
+                        iu.displayMessage("Tienes bandada de " + TypeBird.values()[i]);
+                    }
+                }
                 pos = iu.readNumber("Elige la especie a bajar de tu mano a tu zona de juego: ");
             } while (pos < 0 || pos >= jugador.getHandSize());
 
@@ -76,6 +82,18 @@ public class Game {
                 descartes.añadirCartas(jugador.sacarCartasEspecie(pos));
                 jugador.sumarContadorEspecie(aSumar);
                 iu.displayMessage("Se ha bajado la especie y se ha sumado una bandada de " + aSumar + " a la zona de juego");
+
+                int contador = 0;
+                for (int i = 0; i < jugador.getZonaJuego().length; i++) {
+                    if (jugador.getZonaJuego()[i] > 0) {
+                        contador++;
+                        iu.displayMessage("Tienes bandada de " + TypeBird.values()[i]);
+                    }
+                }
+                if (contador >= 7) {
+                    iu.displayMessage(jugador.getName() + " ha conseguido 7 bandadas y ha ganado la partida.");
+                    System.exit(0);
+                }
             }
             else{
                 iu.displayMessage("No es posible bajar la especie, solo tienes " + numCartas + " y necesitas al menos " + bandadaMinima);
