@@ -96,7 +96,6 @@ public class Game {
                     iu.displayMessage("No es posible bajar la especie, solo tienes " + numCartas+ " y necesitas al menos " + bandadaMinima);
                 }
             }
-        iu.displayMessage(mesa.toString());
     }
 
     private boolean repartirCartas() {
