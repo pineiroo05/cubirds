@@ -39,4 +39,19 @@ public class DeckOfCards {
     public boolean isEmpty(){
         return cartas.size()==0;
     }
+
+    public boolean reabastecerSiVacia(DiscardedCards descartes){
+        if(!isEmpty()){
+            return true;
+        }
+        if(descartes.getTamano()==0){
+            return false;
+        }
+        List<Card> recuperadas=descartes.extraerTodas();
+        for(int i=0; i<recuperadas.size(); i++){
+            cartas.addLast(recuperadas.get(i));
+        }
+        barajar();
+        return true;
+    }
 }

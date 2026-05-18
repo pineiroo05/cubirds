@@ -19,11 +19,6 @@ public class Player {
     }
 
     public int getHandSize() {
-        /*int contador=0;
-        for(List<Card> sublista:manoCartas){
-            contador+=sublista.size();
-        }
-        return contador;*/
         return manoCartas.size();
     }
 
@@ -80,6 +75,29 @@ public class Player {
 
     public List<Card> devolverCartasEspecie(int pos){
         return manoCartas.get(pos);
+    }
+
+    public boolean puedeFormarBandada(int pos){
+        int numCartas=numCartasEspecie(pos);
+        int bandadaMinima=devolverCartasEspecie(pos).get(0).getSmallFlock();
+        return numCartas>=bandadaMinima;
+    }
+
+    public TypeBird bajarBandada(int pos, DiscardedCards descartes){
+        TypeBird especie = devolverCartasEspecie(pos).getFirst().getTypeBird();
+        descartes.añadirCartas(sacarCartasEspecie(pos));
+        sumarContadorEspecie(especie);
+        return especie;
+    }
+
+    public boolean haGanado(){
+        int contador=0;
+        for(int cont:zonaJuego){
+            if(cont>0){
+                contador++;
+            }
+        }
+        return contador>=7;
     }
 
     @Override

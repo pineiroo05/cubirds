@@ -107,7 +107,7 @@ public class Table {
         return false;
     }
 
-    public void colocarCartasIniciales(DeckOfCards baraja, List<Player> listaJugadores) {
+    public void colocarCartasIniciales(DeckOfCards baraja) {
         for (int i = 0; i < 4; i++) {
             while (mesa[i].size() < 3) {
                 Card carta = baraja.extraerCarta();
@@ -149,23 +149,19 @@ public class Table {
      * a la que solo queda en la fila.
      */
     private void rellenarFila(int fila, DeckOfCards baraja, DiscardedCards descartes) {
-
         if (mesa[fila].isEmpty()) {
-            if (RecuperarDeBaraja(baraja, descartes)) {
+            if (baraja.reabastecerSiVacia(descartes)) {
                 mesa[fila].addLast(baraja.extraerCarta());
             } else {
                 return;
             }
         }
-
         TypeBird especieSobrante = mesa[fila].get(0).getTypeBird(); //no me convence el nombre de Sobrante, pero ya no se que ponerle
         boolean especieDiferenteEncontrada = false;
-
         boolean quedanCartasDisponibles = true;
         while (!especieDiferenteEncontrada && quedanCartasDisponibles) {
-
             // comprobamos si podemos recuperar cartas
-            if (!RecuperarDeBaraja(baraja, descartes)) {
+            if (!baraja.reabastecerSiVacia(descartes)) {
                 quedanCartasDisponibles = false;
             } else {
                 // si hay cartas ejecutamos el camino normal de forma segura
@@ -179,7 +175,7 @@ public class Table {
         }
     }
     
-    private boolean RecuperarDeBaraja(DeckOfCards baraja, DiscardedCards descartes) {
+    /*private boolean RecuperarDeBaraja(DeckOfCards baraja, DiscardedCards descartes) {
          if (baraja.isEmpty()) {
             if (descartes.getTamano() == 0) {
                 return false;
@@ -191,7 +187,7 @@ public class Table {
             baraja.barajar();
         }
         return true;
-    }
+    }*/
 
     /**
      * Muestra el estado de la mesa.
