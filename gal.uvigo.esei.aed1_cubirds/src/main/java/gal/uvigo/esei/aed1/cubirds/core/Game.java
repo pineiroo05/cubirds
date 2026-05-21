@@ -135,7 +135,7 @@ public class Game {
     /**
      * Metodo principal para jugar
      */
-    public void play() {
+    /*public void play() {
         crearJugadores();
 
         baraja.barajar();
@@ -176,5 +176,52 @@ public class Game {
             }
         } while (true);
         
+    } */
+    /**
+     * Metodo principal para jugar
+     */
+    public void play() {
+        crearJugadores();
+
+        baraja.barajar();
+        repartirCartas();
+        mesa.colocarCartasIniciales(baraja);
+        iu.displayMessage(mesa.toString());
+
+        iu.displayMessage("¡Partida preparada! Empieza " + listaJugadores.get(0).getName());
+
+        boolean seguirJugando = true;
+        int i = 0;
+        while (seguirJugando == true) {
+
+            Player jugador = listaJugadores.get(i % listaJugadores.size());
+            turnoJugador(jugador);
+            if (jugador.haGanado()) {
+                iu.displayMessage(jugador.getName() + " ha conseguido 7 bandadas. Ha ganado 1 partida!!");
+                seguirJugando = false;
+            }
+            // El jugador actual tiene la mano vacia? los otros meten su mano en los
+            // descartes
+            if (jugador.isHandEmpty() && seguirJugando == true) {
+                for (Player otroJugador : listaJugadores) {
+                    if (!otroJugador.equals(jugador)) {
+                        descartes.añadirCartas(otroJugador.vaciarMano());
+                    }
+                }
+                List<Card> descartesRecuperados = descartes.extraerTodas();
+                for (int j = 0; j < descartesRecuperados.size(); j++) {
+                    baraja.getCartas().addLast(descartesRecuperados.get(j));
+                }
+                baraja.barajar();
+                if (!repartirCartas()) {
+                    finalizarFaltaCartas();
+                    seguirJugando = false;
+                }
+                iu.displayMessage("-Se reparten nuevas cartas-");
+            }
+            i++;
+
+        }
+
     }
 }
