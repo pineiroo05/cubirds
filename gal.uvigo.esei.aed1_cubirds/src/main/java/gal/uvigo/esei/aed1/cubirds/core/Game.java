@@ -91,9 +91,10 @@ public class Game {
                         }
                     }
                 }else{
-                    int numCartas=jugador.numCartasEspecie(pos);
+                    /*int numCartas=jugador.numCartasEspecie(pos);
                     int bandadaMinima=jugador.devolverCartasEspecie(pos).get(0).getSmallFlock();
-                    iu.displayMessage("No es posible bajar la especie, solo tienes " + numCartas+ " y necesitas al menos " + bandadaMinima);
+                    iu.displayMessage("No es posible bajar la especie, solo tienes " + numCartas+ " y necesitas al menos " + bandadaMinima);*/
+                    iu.displayMessage("No es posible bajar la especie, no tienes suficientes cartas para formar una bandada");
                 }
             }
     }
