@@ -31,7 +31,7 @@ public class Player {
     }
 
     public boolean isHandEmpty() {
-        return getHandSize() == 0;
+        return manoCartas.size() == 0;
     }
     /**
      *suma 1 al valor de la especie q corresponda tras bajar la bandada
@@ -73,18 +73,18 @@ public class Player {
         return manoCartas.remove(pos);
     }
 
-    public List<Card> devolverCartasEspecie(int pos){
+    /*public List<Card> devolverCartasEspecie(int pos){
         return manoCartas.get(pos);
-    }
+    }*/
 
     public boolean puedeFormarBandada(int pos){
         int numCartas=numCartasEspecie(pos);
-        int bandadaMinima=devolverCartasEspecie(pos).get(0).getSmallFlock();
+        int bandadaMinima=manoCartas.get(pos).get(0).getSmallFlock();
         return numCartas>=bandadaMinima;
     }
 
     public TypeBird bajarBandada(int pos, DiscardedCards descartes){
-        TypeBird especie = devolverCartasEspecie(pos).getFirst().getTypeBird();
+        TypeBird especie = manoCartas.get(pos).getFirst().getTypeBird();
         descartes.añadirCartas(sacarCartasEspecie(pos));
         sumarContadorEspecie(especie);
         return especie;
