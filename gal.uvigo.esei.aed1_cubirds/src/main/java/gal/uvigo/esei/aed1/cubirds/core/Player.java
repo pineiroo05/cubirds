@@ -36,7 +36,7 @@ public class Player {
     /**
      *suma 1 al valor de la especie q corresponda tras bajar la bandada
      */
-    public void sumarContadorEspecie(TypeBird especie) {
+    private void sumarContadorEspecie(TypeBird especie) {
         zonaJuego[especie.ordinal()]++; //ordinal pilla el num que le corresponda a la especie en el enum(flamenco es 0, tucan 1, etc)
     }
 
@@ -72,10 +72,6 @@ public class Player {
     public List<Card> sacarCartasEspecie(int pos) {
         return manoCartas.remove(pos);
     }
-
-    /*public List<Card> devolverCartasEspecie(int pos){
-        return manoCartas.get(pos);
-    }*/
 
     public boolean puedeFormarBandada(int pos){
         int numCartas=numCartasEspecie(pos);

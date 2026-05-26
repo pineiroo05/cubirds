@@ -33,23 +33,11 @@ public class Game {
         iu.displayMessage("Turno de " + jugador.getName());
         iu.displayMessage(jugador.toString()); // Mano al inicio del turno
         // SELECCION DE LA ESPECIE
-        int especie;
-        do {
-            especie = iu.readNumber("Elige la especie a jugar: ");
-        } while (especie < 0 || especie >= jugador.getHandSize());
+        int especie=iu.pedirEspecie(jugador.getHandSize());
         // SELECCION DE LA FILA
-        int fila;
-        do {
-            fila = iu.readNumber("Elige una fila (1-4): ");
-        } while (fila < 1 || fila > 4);
-
-        boolean derecha;
+        int fila=iu.pedirFila();
         //SELECCION DEL LADO
-        String lado;
-        do {
-            lado = iu.readString("¿Derecha? (s/n): ");
-            derecha = lado.equalsIgnoreCase("s");
-        } while (!lado.equalsIgnoreCase("s") && !lado.equalsIgnoreCase("n"));
+        boolean derecha=iu.pedirLado();
         // SACAR CARTA Y COLOCARLA
         List<Card> cartasJugar = jugador.sacarCartasEspecie(especie);
         List<Card> cartasCapturadas = mesa.colocarCartas(fila - 1, cartasJugar, derecha, baraja, descartes);
@@ -91,9 +79,6 @@ public class Game {
                         }
                     }
                 }else{
-                    /*int numCartas=jugador.numCartasEspecie(pos);
-                    int bandadaMinima=jugador.devolverCartasEspecie(pos).get(0).getSmallFlock();
-                    iu.displayMessage("No es posible bajar la especie, solo tienes " + numCartas+ " y necesitas al menos " + bandadaMinima);*/
                     iu.displayMessage("No es posible bajar la especie, no tienes suficientes cartas para formar una bandada");
                 }
             }
@@ -114,7 +99,7 @@ public class Game {
         return true;
     }
 
-    public void finalizarFaltaCartas() {
+    private void finalizarFaltaCartas() {
         iu.displayMessage("No ha sido posible realizar el reparto de cartas.");
         Player ganador = null;
         int maxCartas = -1;
@@ -133,51 +118,6 @@ public class Game {
         }
     }
 
-    /**
-     * Metodo principal para jugar
-     */
-    /*public void play() {
-        crearJugadores();
-
-        baraja.barajar();
-        if (!repartirCartas()) {
-            finalizarFaltaCartas();
-            return;
-        }
-        mesa.colocarCartasIniciales(baraja);
-        iu.displayMessage(mesa.toString());
-
-        iu.displayMessage("¡Partida preparada! Empieza " + listaJugadores.get(0).getName());
-
-        do {
-            for (Player jugador : listaJugadores) {
-                turnoJugador(jugador);
-                if(jugador.haGanado()){
-                    iu.displayMessage(jugador.getName()+" ha conseguido 7 bandadas. Ha ganado 1 partida!!");
-                    return;
-                }
-                // El jugador actual tiene la mano vacia? los otros meten su mano en los descartes
-                if (jugador.isHandEmpty()) {
-                    for (Player otroJugador : listaJugadores) {
-                        if (!otroJugador.equals(jugador)) {
-                            descartes.añadirCartas(otroJugador.vaciarMano());
-                        }
-                    }
-                    List<Card> descartesRecuperados = descartes.extraerTodas();
-                    for (int i = 0; i < descartesRecuperados.size(); i++) {
-                        baraja.getCartas().addLast(descartesRecuperados.get(i));
-                    }
-                    baraja.barajar();
-                    if (!repartirCartas()) {
-                        finalizarFaltaCartas();
-                        return;
-                    }
-                    iu.displayMessage("-Se reparten nuevas cartas-");
-                }
-            }
-        } while (true);
-        
-    } */
     /**
      * Metodo principal para jugar
      */

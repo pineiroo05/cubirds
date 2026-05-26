@@ -31,7 +31,7 @@ public class Table {
         return capturadas;
     }
 
-    public List<Card> colocarSinCapturar(int fila, List<Card> cartas, boolean derecha) {
+    private List<Card> colocarSinCapturar(int fila, List<Card> cartas, boolean derecha) {
         for (Card carta : cartas) {
             if (derecha) {
                 mesa[fila].addLast(carta);
@@ -42,7 +42,7 @@ public class Table {
         return new LinkedList<>();
     }
 
-    public List<Card> colocarCapturando(int fila, List<Card> cartas, boolean derecha, TypeBird especie) {
+    private List<Card> colocarCapturando(int fila, List<Card> cartas, boolean derecha, TypeBird especie) {
         List<Card> capturadas = new LinkedList<>();
         if (derecha) {
             for (Card carta : cartas) {
@@ -97,13 +97,11 @@ public class Table {
      * @return true si hay alguna carta con la misma especie, false si no
      */
     public boolean hasMismaEspecie(int fila, TypeBird species) {
-        // if (fila >= 0 && fila < mesa.length) {
         for (Card card : mesa[fila]) {
             if (card.getTypeBird().equals(species)) {
                 return true;
             }
         }
-        // }
         return false;
     }
 
@@ -174,20 +172,6 @@ public class Table {
             }
         }
     }
-    
-    /*private boolean RecuperarDeBaraja(DeckOfCards baraja, DiscardedCards descartes) {
-         if (baraja.isEmpty()) {
-            if (descartes.getTamano() == 0) {
-                return false;
-            }
-            List<Card> recuperadas = descartes.extraerTodas();
-            for (int i = 0; i < recuperadas.size(); i++) {
-                baraja.getCartas().addLast(recuperadas.get(i));
-            }
-            baraja.barajar();
-        }
-        return true;
-    }*/
 
     /**
      * Muestra el estado de la mesa.

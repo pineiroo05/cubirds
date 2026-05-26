@@ -10,6 +10,31 @@ public class IU {
     public IU() {
         keyboard = new Scanner(System.in);
     }
+
+    public int pedirEspecie(int tamMano){
+        int especie;
+        do {
+            especie = readNumber("Elige la especie a jugar: ");
+        } while (especie < 0 || especie >= tamMano);
+        return especie;
+    }
+
+    public int pedirFila(){
+        int fila;
+        do {
+            fila = readNumber("Elige una fila (1-4): ");
+        } while (fila < 1 || fila > 4);
+        return fila;
+    }
+
+    public boolean pedirLado(){
+        String lado;
+        do {
+            lado = readString("¿Derecha? (s/n): ");
+        } while (!lado.equalsIgnoreCase("s") && !lado.equalsIgnoreCase("n"));
+        return lado.equalsIgnoreCase("s");
+    }
+
     public int pedirNumJugadores(){
         int numJugadores;
         do{
